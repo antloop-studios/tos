@@ -11,7 +11,7 @@ function love.load()
    server = host:connect(address..":"..port)
    status = {add=function(self, ...) self[(#self+1)%5] = {...} end}
    data = {
-      id = 0,
+      uid = 0,
       left=false,
       right=false,
       up=false,
@@ -29,8 +29,8 @@ function love.update()
    while event do
       if event.type == "receive" then
          local d = ser.d(event.data)[1]
-         if d.id then
-            data.id = d.id
+         if d.uid then
+            data.uid = d.uid
          else
             entities = d
          end
@@ -45,7 +45,12 @@ function love.update()
 end
 
 function love.draw()
-   for i, entity in ipairs(entities) do
+   for i, entity in pairs(entities) do
+      if entity.uid == data.uid then
+         love.graphics.setColor(0.2, 0.5, 0.7, 1)
+      else
+         love.graphics.setColor(0.5, 0.5, 0.5, 1)
+      end
       love.graphics.circle("fill", entity.x or 0, entity.y or 0, 10)
    end
 end
