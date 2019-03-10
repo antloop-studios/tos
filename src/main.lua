@@ -25,7 +25,7 @@ function love.update()
    data.up = love.keyboard.isDown 'w'
    data.down = love.keyboard.isDown 's'
 
-   local event = host:service(100)
+   local event = host:service()
    while event do
       if event.type == "receive" then
          local d = ser.d(event.data)[1]
@@ -34,10 +34,6 @@ function love.update()
          else
             entities = d
          end
-      elseif event.type == "connect" then
-         status:add(event.peer, "connected.")
-      elseif event.type == "disconnect" then
-         status:add(event.peer, "disconnected.")
       end
       event = host:service()
    end
@@ -53,4 +49,6 @@ function love.draw()
       end
       love.graphics.circle("fill", entity.x or 0, entity.y or 0, 10)
    end
+
+   love.graphics.print(dump(entities))
 end
